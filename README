@@ -1,0 +1,8 @@
+to compile:
+make
+
+to use in the toplevel:
+#use "interval_tree.ml";;
+
+You may wish to uncomment the tests at the end of interval_tree.ml
+when playing in the toplevel.
