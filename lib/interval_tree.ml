@@ -90,7 +90,8 @@ let partition intervals x_mid =
 
 (* -------------------- construction -------------------- *)
 
-(* interval tree of a list of intervals WARNING: NOT TAIL REC. *)
+(* interval tree of a list of intervals
+   WARNING: NOT TAIL REC. *)
 let rec create = function
   | [] -> Empty
   | intervals ->
@@ -101,6 +102,16 @@ let rec create = function
     Node (x_mid,
           left_list, right_list,
           create left, create right)
+
+(* interval tree of a list of interval bounds pairs
+   [(lb1, rb1); (lb2, rb2); ...]
+   WARNING: NOT TAIL REC. *)
+let of_pairs pairs =
+  create
+    (L.fold_left
+       (fun acc (a, b) -> (Itv.create a b) :: acc)
+       []
+       pairs)
 
 (* -------------------- query -------------------- *)
 
