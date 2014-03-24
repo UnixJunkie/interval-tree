@@ -1,0 +1,13 @@
+OASISFormat: 0.4
+Name:        itv-tree
+Version:     1.0
+Synopsis:    Interval tree for float intervals
+Authors:     Francois Berenger
+License:     BSD-3-clause
+Plugins:     META (0.4)
+
+Library "itv-tree"
+  Path:       .
+  BuildTools: ocamlbuild
+  Modules:    Interval_tree
+  
