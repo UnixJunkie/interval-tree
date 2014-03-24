@@ -6,7 +6,15 @@ Authors:     Francois Berenger
 License:     BSD-2-clause
 Plugins:     META (0.4)
 
+BuildTools:  ocamlbuild
+
 Library "itv-tree"
-  Path:       .
-  BuildTools: ocamlbuild
-  Modules:    Interval_tree
+  Path:           lib
+  CompiledObject: best
+  Modules:        Interval_tree
+
+Executable test
+  Path:         lib_test
+  Install:      false
+  mainIs:       test.ml
+  buildDepends: itv-tree
