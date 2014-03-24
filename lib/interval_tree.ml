@@ -19,6 +19,7 @@ module Interval : sig
   type t = { lbound : float ;
              rbound : float }
   val create : float -> float -> t
+  val of_pair : float * float -> t
   val to_pair : t -> float * float
 end = struct
   type t = { lbound : float ;
@@ -27,6 +28,8 @@ end = struct
     assert (l <= r);
     { lbound = l ;
       rbound = r }
+  let of_pair (lb, rb) =
+    create lb rb
   let to_pair itv =
     (itv.lbound, itv.rbound)
 end
