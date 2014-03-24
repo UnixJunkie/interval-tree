@@ -4,34 +4,43 @@
    reference:
 
    @book{ CompGeomThirdEdSpringer,
-     title     = "Computational Geometry: Algorithms and Applications",
-     author    = "M. {de Berg} and O. Cheong and M. {van Kreveld} and
-                  M. Overmars",
-     edition   = "Third Edition",
-     pages     = {223--224},
-     doi       = "10.1007/978-3-540-77974-2",
-     year      = "2008",
-     publisher = "Springer"
+   title     = "Computational Geometry: Algorithms and Applications",
+   author    = "M. {de Berg} and O. Cheong and M. {van Kreveld} and
+   M. Overmars",
+   edition   = "Third Edition",
+   pages     = {223--224},
+   doi       = "10.1007/978-3-540-77974-2",
+   year      = "2008",
+   publisher = "Springer"
    } *)
 
-module A = Array
-module L = List
+module Interval : sig
+  (* since bounds are read-only, we don't care about leaving them public *)
+  type t = { lbound : float ;
+             rbound : float }
+  val create : float -> float -> t
+end = struct
+  type t = { lbound : float ;
+             rbound : float }
+  let create l r =
+    assert (l <= r);
+    { lbound = l ;
+      rbound = r }
+end
 
-type interval = { lbound : float ;
-                  rbound : float }
+module A   = Array
+module Itv = Interval
+module L   = List
+
+open Itv
 
 type interval_tree =
     Empty
   | Node of
-   (* x_mid   left_list       right_list      left_tree       right_tree *)
-      float * interval list * interval list * interval_tree * interval_tree
+      (* x_mid left_list    right_list   left_tree       right_tree *)
+      float *  Itv.t list * Itv.t list * interval_tree * interval_tree
 
 (* -------------------- utility functions -------------------- *)
-
-let new_interval l r =
-  assert (l <= r);
-  { lbound = l ;
-    rbound = r }
 
 let leftmost_bound_first i1 i2 =
   compare i1.lbound i2.lbound
@@ -51,8 +60,8 @@ let bounds_array_of_intervals intervals =
   let i   = ref 0               in
   L.iter
     (fun interval ->
-       res.(!i) <- interval.lbound; incr i;
-       res.(!i) <- interval.rbound; incr i)
+      res.(!i) <- interval.lbound; incr i;
+      res.(!i) <- interval.rbound; incr i)
     intervals;
   res
 
@@ -77,22 +86,21 @@ let partition intervals x_mid =
     L.partition
       (fun interval -> contains interval x_mid)
       maybe_right_intervals in
-   left_intervals, mid_intervals, right_intervals
+  left_intervals, mid_intervals, right_intervals
 
 (* -------------------- construction -------------------- *)
 
-(* interval tree of a list of intervals WARNING: NOT TAIL RECURSIVE *)
-let rec interval_tree intervals =
-  match intervals with
-      [] -> Empty
-    | _  ->
-        let x_mid            = median intervals                 in
-        let left, mid, right = partition intervals x_mid        in
-        let left_list        = L.sort leftmost_bound_first  mid in
-        let right_list       = L.sort rightmost_bound_first mid in
-        Node (x_mid,
-              left_list, right_list,
-              interval_tree left, interval_tree right)
+(* interval tree of a list of intervals WARNING: NOT TAIL REC. *)
+let rec create = function
+  | [] -> Empty
+  | intervals ->
+    let x_mid            = median intervals                 in
+    let left, mid, right = partition intervals x_mid        in
+    let left_list        = L.sort leftmost_bound_first  mid in
+    let right_list       = L.sort rightmost_bound_first mid in
+    Node (x_mid,
+          left_list, right_list,
+          create left, create right)
 
 (* -------------------- query -------------------- *)
 
@@ -101,10 +109,10 @@ let rec fold_while f p acc l =
   match l with
       []      -> acc
     | x :: xs ->
-        if p x then
-          fold_while f p (f x :: acc) xs
-        else
-          acc
+      if p x then
+        fold_while f p (f x :: acc) xs
+      else
+        acc
 
 let filter_left_list l qx acc =
   fold_while
@@ -123,11 +131,11 @@ let query initial_tree qx =
   let rec query_priv acc tree = match tree with
       Empty -> acc
     | Node (x_mid, left_list, right_list, left_tree, right_tree) ->
-        if qx < x_mid then
-          let new_acc = filter_left_list  left_list  qx acc in
-          query_priv new_acc left_tree
-        else
-          let new_acc = filter_right_list right_list qx acc in
-          query_priv new_acc right_tree
+      if qx < x_mid then
+        let new_acc = filter_left_list  left_list  qx acc in
+        query_priv new_acc left_tree
+      else
+        let new_acc = filter_right_list right_list qx acc in
+        query_priv new_acc right_tree
   in
   query_priv [] initial_tree
