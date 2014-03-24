@@ -41,10 +41,12 @@ module L   = List
 open Itv
 
 type interval_tree =
-    Empty
+  | Empty
   | Node of
       (* x_mid left_list    right_list   left_tree       right_tree *)
       float *  Itv.t list * Itv.t list * interval_tree * interval_tree
+
+type t = interval_tree
 
 (* -------------------- utility functions -------------------- *)
 
