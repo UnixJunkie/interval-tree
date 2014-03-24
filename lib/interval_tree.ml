@@ -116,18 +116,6 @@ let of_pairs pairs =
        []
        pairs)
 
-(* unsorted list of interval bounds pairs from an interval_tree
-   [(lb1, rb1); (lb2, rb2); ...]
-   WARNING: NOT TAIL REC. *)
-let to_pairs tree =
-  let rec loop acc = function
-    | Empty -> acc
-    | Node (_x_mid, left_list, right_list, left_tree, right_tree) ->
-      let curr_pairs = L.rev_append left_list right_list in
-      let new_acc = loop (L.rev_append curr_pairs acc) left_tree in
-      loop new_acc right_tree
-  in loop [] tree
-
 (* -------------------- query -------------------- *)
 
 (* fold_left f on l while p is true *)
