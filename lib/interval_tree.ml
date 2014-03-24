@@ -131,14 +131,13 @@ let to_pairs tree =
 (* -------------------- query -------------------- *)
 
 (* fold_left f on l while p is true *)
-let rec fold_while f p acc l =
-  match l with
-      []      -> acc
-    | x :: xs ->
-      if p x then
-        fold_while f p (f x :: acc) xs
-      else
-        acc
+let rec fold_while f p acc = function
+  | [] -> acc
+  | x :: xs ->
+    if p x then
+      fold_while f p (f x :: acc) xs
+    else
+      acc
 
 let filter_left_list l qx acc =
   fold_while
@@ -154,8 +153,8 @@ let filter_right_list l qx acc =
 
 (* find all intervals that contain qx *)
 let query initial_tree qx =
-  let rec query_priv acc tree = match tree with
-      Empty -> acc
+  let rec query_priv acc = function
+    | Empty -> acc
     | Node (x_mid, left_list, right_list, left_tree, right_tree) ->
       if qx < x_mid then
         let new_acc = filter_left_list  left_list  qx acc in
