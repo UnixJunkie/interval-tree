@@ -1,0 +1,16 @@
+Name:       itv-tree
+Version:    1.0
+Authors:    Francois Berenger
+License:    BSD-2-clause
+Synopsis:   Interval tree for float intervals
+obuild-ver: 1
+
+library itv-tree
+  oflags:  -annot -w +27 -warn-error +8
+  modules: Interval_tree
+  src-dir: lib
+
+Executable test
+  oflags:  -annot -w +27 -warn-error +8
+  src-dir: lib_test
+  MainIs:  test.ml
