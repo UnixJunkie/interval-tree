@@ -16,22 +16,23 @@
 
 module Interval : sig
   (* since bounds are read-only, we don't care about leaving them public *)
-  type t = { lbound : float ;
-             rbound : float }
-  val create : float -> float -> t
-  val of_pair : float * float -> t
-  val to_pair : t -> float * float
+  type 'a t = { lbound : float ;
+                rbound : float ;
+                value  : 'a    }
+  val create : float -> float -> 'a -> 'a t
+  val of_triplet : float * float * 'a -> 'a t
+  val to_triplet : 'a t -> float * float * 'a
 end = struct
-  type t = { lbound : float ;
-             rbound : float }
-  let create l r =
-    assert (l <= r);
-    { lbound = l ;
-      rbound = r }
-  let of_pair (lb, rb) =
-    create lb rb
-  let to_pair itv =
-    (itv.lbound, itv.rbound)
+  type 'a t = { lbound : float ;
+                rbound : float ;
+                value  : 'a    }
+  let create lbound rbound value =
+    assert (lbound <= rbound);
+    { lbound ; rbound ; value }
+  let of_triplet (l, r, v) =
+    create l r v
+  let to_triplet itv =
+    (itv.lbound, itv.rbound, itv.value)
 end
 
 module A   = Array
@@ -40,13 +41,13 @@ module L   = List
 
 open Itv
 
-type interval_tree =
+type 'a interval_tree =
   | Empty
   | Node of
-      (* x_mid left_list    right_list   left_tree       right_tree *)
-      float *  Itv.t list * Itv.t list * interval_tree * interval_tree
+      (* x_mid left_list       right_list      left_tree          right_tree *)
+      float *  'a Itv.t list * 'a Itv.t list * 'a interval_tree * 'a interval_tree
 
-type t = interval_tree
+type 'a t = 'a interval_tree
 
 (* -------------------- utility functions -------------------- *)
 
@@ -111,15 +112,15 @@ let rec create = function
           left_list, right_list,
           create left, create right)
 
-(* interval tree of a list of interval bounds pairs
-   [(lb1, rb1); (lb2, rb2); ...]
+(* interval tree of a list of interval bounds pairs and values
+   [(lb1, rb1, v1); (lb2, rb2, v2); ...]
    WARNING: NOT TAIL REC. *)
-let of_pairs pairs =
+let of_triplets triplets =
   create
     (L.fold_left
-       (fun acc (a, b) -> (Itv.create a b) :: acc)
+       (fun acc (l, r, v) -> (Itv.create l r v) :: acc)
        []
-       pairs)
+       triplets)
 
 (* -------------------- query -------------------- *)
 

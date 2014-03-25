@@ -5,28 +5,29 @@ module L    = List
 
 let sort_intervals l =
   L.sort
-    (fun ((lb1 : float), _rb1) ((lb2 : float), _rb2) -> compare lb1 lb2)
+    (fun ((lb1 : float), _rb1, _v1) ((lb2 : float), _rb2, _v2) -> compare lb1 lb2)
     l
 
 let main () =
-  let interval_bounds = [ 0.,   4.;
-                          1.,   2.;
-                          3.,   9.;
-                          5.,   7.;
-                          6.,  13.;
-                          8.,  11.;
-                          10., 12.] in
-  let tree = Itvt.of_pairs interval_bounds in
+  (* the values are the index of each interval in the list *)
+  let interval_bounds = [ 0.,   4., 0 ;
+                          1.,   2., 1 ;
+                          3.,   9., 2 ;
+                          5.,   7., 3 ;
+                          6.,  13., 4 ;
+                          8.,  11., 5 ;
+                          10., 12., 6 ] in
+  let tree = Itvt.of_triplets interval_bounds in
   let test q =
-    sort_intervals (L.map Itv.to_pair (Itvt.query tree q))
+    sort_intervals (L.map Itv.to_triplet (Itvt.query tree q))
   in
-  assert([(0., 4. )]                        = test 0.5 );
-  assert([(0., 4. ); (1., 2. )]             = test 1.0 );
-  assert([(0., 4. ); (3., 9. )]             = test 3.0 );
-  assert([(3., 9. ); (5., 7. )]             = test 5.0 );
-  assert([(3., 9. ); (5., 7. ); (6., 13. )] = test 6.0 );
-  assert([(3., 9. ); (6., 13.); (8., 11. )] = test 8.0 );
-  assert([(6., 13.); (8., 11.); (10., 12.)] = test 10.0);
+  assert([(0., 4. , 0)]                              = test 0.5 );
+  assert([(0., 4. , 0); (1., 2. , 1)]                = test 1.0 );
+  assert([(0., 4. , 0); (3., 9. , 2)]                = test 3.0 );
+  assert([(3., 9. , 2); (5., 7. , 3)]                = test 5.0 );
+  assert([(3., 9. , 2); (5., 7. , 3); (6., 13. , 4)] = test 6.0 );
+  assert([(3., 9. , 2); (6., 13., 4); (8., 11. , 5)] = test 8.0 );
+  assert([(6., 13., 4); (8., 11., 5); (10., 12., 6)] = test 10.0);
 ;;
 
 main()
