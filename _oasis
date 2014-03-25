@@ -1,6 +1,6 @@
 OASISFormat: 0.4
 Name:        itv-tree
-Version:     1.0
+Version:     2.0
 Synopsis:    Interval tree for float intervals
 Authors:     Francois Berenger
 License:     BSD-2-clause
