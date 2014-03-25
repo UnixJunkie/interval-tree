@@ -1,6 +1,6 @@
 # OASIS_START
-# DO NOT EDIT (digest: ee2f5061ddf64942e2ae8c62059d576c)
-version = "1.0"
+# DO NOT EDIT (digest: adcc445ccd96e86636ddf7fec8e90205)
+version = "2.0"
 description = "Interval tree for float intervals"
 archive(byte) = "itv-tree.cma"
 archive(byte, plugin) = "itv-tree.cma"
