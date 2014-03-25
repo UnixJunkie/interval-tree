@@ -1,5 +1,5 @@
 Name:       itv-tree
-Version:    1.0
+Version:    2.0
 Authors:    Francois Berenger
 License:    BSD-2-clause
 Synopsis:   Interval tree for float intervals
