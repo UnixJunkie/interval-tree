@@ -25,7 +25,7 @@ end
 (** [create intervals_list] : interval tree of all intervals in the list *)
 val create : 'a Interval.t list -> 'a t
 
-(** [of_pairs intervals_bounds_pairs] : interval tree of all intervals
+(** [of_triplets interval_triplets] : interval tree of all intervals
     whose bounds and values are given in a list *)
 val of_triplets : (float * float * 'a) list -> 'a t
 
