@@ -6,11 +6,12 @@ Synopsis:   Interval tree for float intervals
 obuild-ver: 1
 
 library itv-tree
-  oflags:  -annot -w +27 -warn-error +8
+  oflags:  -annot -w +27 -warn-error +8 -bin-annot
   modules: Interval_tree
   src-dir: lib
 
 Executable test
-  oflags:  -annot -w +27 -warn-error +8
+  oflags:  -annot -w +27 -warn-error +8 -bin-annot
   src-dir: lib_test
   MainIs:  test.ml
+  build-deps: itv-tree
