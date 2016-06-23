@@ -65,7 +65,7 @@ let contains interval x_mid =
 
 let bounds_array_of_intervals intervals =
   let n   = L.length intervals  in
-  let res = A.create (2 * n) 0. in
+  let res = A.make (2 * n) 0. in
   let i   = ref 0               in
   L.iter
     (fun interval ->
@@ -122,16 +122,16 @@ let of_triplets triplets =
        []
        triplets)
 
-(* list of interval bounds pairs and values of tree *)
-let rec to_itvs = function
-(* let rec to_triplets (interval_tree : 'a t) = *)
-(*   match interval_tree with *)
-  | Empty -> []
-  | Node (_, left_list, right_list, interval_tree_left, interval_tree_right) ->
-    L.flatten
-      [ left_list; to_itvs interval_tree_left; to_itvs interval_tree_right ]
-
+(* inverse of of_triplets *)
 let to_triplets interval_tree =
+  (* list interval bounds and values
+     WARNING: NOT TAIL REC. *)
+  let rec to_itvs = function
+    | Empty -> []
+    | Node (_, left_list, _right_list, interval_tree_left, interval_tree_right) ->
+      L.flatten
+        [ left_list; to_itvs interval_tree_left; to_itvs interval_tree_right ]
+  in
   let itvs = to_itvs interval_tree in
   L.map
     Itv.to_triplet
