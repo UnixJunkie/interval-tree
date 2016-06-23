@@ -29,8 +29,6 @@ let main () =
   assert([(3., 9. , 2); (6., 13., 4); (8., 11. , 5)] = test 8.0 );
   assert([(6., 13., 4); (8., 11., 5); (10., 12., 6)] = test 10.0);
 
-  assert(interval_bounds                             = sort_intervals (Itvt.to_triplets tree));
+  assert(interval_bounds = sort_intervals (Itvt.to_triplets tree))
 
-;;
-
-main()
+let () = main ()
