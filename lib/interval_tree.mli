@@ -22,15 +22,18 @@ end
 
 (** {4 Constructors} *)
 
-(** [create intervals_list]: interval tree of all intervals in the list *)
+(** [create intervals_list]: interval tree of all intervals in the list.
+    Not tail-recursive. *)
 val create: 'a Interval.t list -> 'a t
 
 (** [of_triplets interval_triplets]: interval tree of all intervals
-    whose bounds and values are given in a list *)
+    whose bounds and values are given in a list.
+    Not tail-recursive. *)
 val of_triplets: (float * float * 'a) list -> 'a t
 
-(** list all intervals and values in the tree
-    WARNING: not tail recursive *)
+(** list all intervals and values in the tree.
+    Inverse of of_triplets.
+    Not tail-recursive. *)
 val to_triplets: 'a t -> (float * float * 'a) list
 
 (** {4 Query} *)
