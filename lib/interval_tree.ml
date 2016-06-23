@@ -122,6 +122,21 @@ let of_triplets triplets =
        []
        triplets)
 
+(* list of interval bounds pairs and values of tree *)
+let rec to_itvs = function
+(* let rec to_triplets (interval_tree : 'a t) = *)
+(*   match interval_tree with *)
+  | Empty -> []
+  | Node (_, left_list, right_list, interval_tree_left, interval_tree_right) ->
+    L.flatten
+      [ left_list; to_itvs interval_tree_left; to_itvs interval_tree_right ]
+
+let to_triplets interval_tree =
+  let itvs = to_itvs interval_tree in
+  L.map
+    Itv.to_triplet
+    itvs
+
 (* -------------------- query -------------------- *)
 
 (* fold_left f on l while p is true *)
