@@ -1,5 +1,8 @@
 all:
-	ocamlfind ocamlopt -annot -g -c interval_tree.ml
+	dune b
 
 clean:
-	\rm -f *.o *.cmi *.cmx *.annot
+	dune clean
+
+test:
+	dune test

@@ -1,8 +1,0 @@
-# where are .ml and .mli files
-S lib
-S lib_test
-# where are .cmi and .cmt files
-B _build/lib_test
-B _build/lib
-# external dependencies
-#PKG batteries
