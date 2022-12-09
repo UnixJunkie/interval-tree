@@ -11,6 +11,7 @@ depends: [
 ]
 build: [
   ["dune" "build" "-p" name "-j" jobs "@install"
-     "@runtest" {with-test}]
+     "@runtest" {with-test}
+  ]
 ]
 dev-repo: "git+https://github.com/UnixJunkie/interval-tree.git"
