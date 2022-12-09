@@ -1,5 +1,18 @@
-all:
-	ocamlfind ocamlopt -annot -g -c interval_tree.ml
+.PHONY: build clean edit install uninstall reinstall
+
+build:
+        dune build @install
 
 clean:
-	\rm -f *.o *.cmi *.cmx *.annot
+        rm -rf _build
+
+edit:
+        emacs src/*.ml TODO commands.sh &
+
+install: build
+        dune install
+
+uninstall:
+        dune uninstall
+
+reinstall: uninstall install
