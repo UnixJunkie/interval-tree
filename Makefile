@@ -1,18 +1,18 @@
 .PHONY: build clean edit install uninstall reinstall
 
 build:
-        dune build @install
+	dune build @install
 
 clean:
-        rm -rf _build
+	rm -rf _build
 
 edit:
-        emacs src/*.ml TODO commands.sh &
+	emacs src/*.ml TODO commands.sh &
 
 install: build
-        dune install
+	dune install
 
 uninstall:
-        dune uninstall
+	dune uninstall
 
 reinstall: uninstall install
